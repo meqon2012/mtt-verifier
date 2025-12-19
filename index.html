@@ -965,22 +965,31 @@
             resultsPanel.classList.remove('active');
 
             try {
-                let filesText = '';
-                Object.keys(fileContents).forEach(key => {
-                    const content = fileContents[key];
-                    filesText += '\n=== Файл: ' + key + ' ===\n' + content + '\n';
-                });
+let filesText = '';
+Object.keys(fileContents).forEach(key => {
+    const content = fileContents[key];
+    filesText += '\n=== Файл: ' + key + ' ===\n' + content + '\n';
+});
+
 
                 let prompt = prompts[currentPromptId].text;
                 prompt = prompt.replace('{files}', filesText).replace('{info}', '');
 
-                console.log('📤 Отправляю запрос на backend...');
+console.log('📤 Отправляю запрос на backend...');
+console.log('📝 Промт:', prompt);
 
-                const response = await fetch('/api/analyze', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt })
-                });
+const formData = new FormData();
+formData.append('prompt', prompt);
+
+uploadedFiles.forEach((file, index) => {
+    formData.append('files', file);
+});
+
+const response = await fetch('/api/analyze', {
+    method: 'POST',
+    body: formData
+});
+
 
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
