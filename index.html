@@ -965,22 +965,29 @@
             resultsPanel.classList.remove('active');
 
             try {
-                let filesText = '';
-                Object.keys(fileContents).forEach(key => {
-                    const content = fileContents[key].substring(0, 2000);
-                    filesText += '\n=== Файл: ' + key + ' ===\n' + content + '\n';
-                });
+                // ✅ Собираем содержимое файлов
+let filesText = '';
+Object.keys(fileContents).forEach(key => {
+    const content = fileContents[key].substring(0, 2000);
+    filesText += `\n--- ${key} ---\n${content}`;
+});
 
-                let prompt = prompts[currentPromptId].text;
-                prompt = prompt.replace('{files}', filesText).replace('{info}', '');
+let prompt = prompts[currentPromptId].text;
 
-                console.log('📤 Отправляю запрос на backend...');
+// ✅ Правильная замена плейсхолдеров
+prompt = prompt.replace('[files]', filesText)
+              .replace('{files}', filesText)
+              .replace(/files:/g, filesText);  // Только точные совпадения
 
-                const response = await fetch('/api/analyze', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt })
-                });
+console.log('Отправляемый промт:', prompt.substring(0, 500) + '...');
+console.log('Файлы в промте:', Object.keys(fileContents).length);
+console.log('Длина filesText:', filesText.length);
+const response = await fetch('/api/analyze', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt })  // ✅ Теперь с файлами!
+});
+
 
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
