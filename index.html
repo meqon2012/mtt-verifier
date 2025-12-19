@@ -910,7 +910,7 @@
                 contentKeys.forEach(key => {
                     allContent += '=== ' + key + ' ===\n' + fileContents[key] + '\n\n';
                 });
-                document.getElementById('fileContentPreview').textContent = allContent.substring(0, 2000);
+                document.getElementById('fileContentPreview').textContent = allContent.substring(0, 3000);
                 document.getElementById('fileContentSection').style.display = 'block';
             } else {
                 document.getElementById('fileContentSection').style.display = 'none';
@@ -967,7 +967,7 @@
             try {
                 let filesText = '';
                 Object.keys(fileContents).forEach(key => {
-                    const content = fileContents[key].substring(0, 2000);
+                    const content = fileContents[key];
                     filesText += '\n=== Файл: ' + key + ' ===\n' + content + '\n';
                 });
 
