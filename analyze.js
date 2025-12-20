@@ -11,7 +11,7 @@ let prompts = {};
 let currentPromptId = null;
 
 // ВАЖНО: Замените на ваш реальный API ключ от Perplexity
-const PERPLEXITY_API_KEY = 'ВАШ_API_KEY_ЗДЕСЬ';
+const PERPLEXITY_API_KEY = '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';
 
 // Используем правильное имя модели
 // Доступные модели: sonar, sonar-pro, sonar-reasoning-pro, sonar-reasoning
